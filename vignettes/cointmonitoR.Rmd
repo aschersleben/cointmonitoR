@@ -1,0 +1,152 @@
+---
+title: "cointmonitoR"
+author: "Philipp Aschersleben"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{cointmonitoR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{R, include = FALSE}
+knitr::opts_chunk$set(fig.path = "figures/vignette-", fig.width = 5, message = FALSE)
+library(cointmonitoR)
+```
+
+
+## Install cointmonitoR
+
+At first, you have to install the `cointReg` package, that provides functions for parameter estimation and inference in cointegrating regressions (see its [GitHub page](https://github.com/aschersleben/cointReg) for further information).
+Since the two packages are not available on CRAN yet, you have to download and install the packages directly from GitHub.
+```{R, eval = FALSE}
+devtools::install_github("aschersleben/cointReg", build_vignettes = TRUE)
+```
+
+Then install the `cointmonitoR` package and load it:
+```{R, eval = FALSE}
+devtools::install_github("aschersleben/cointmonitoR", build_vignettes = TRUE)
+library("cointmonitoR")
+```
+
+
+
+## Basic examples
+
+### Monitoring Stationarity
+
+Generate a time series to monitor. Since it's the easiest way to generate a stationary time series, we get `x1` as a vector of random number from a standard normal distribution.
+```{R}
+set.seed(1909)
+x1 <- rnorm(200)
+```
+
+The use of the monitoring procedure is really simple, you just have to choose the length of the calibration period. Here we take `m` as the first 25 % of the total length of `x1` (i.e. the first 50 observations).
+
+```{R}
+test1 <- monitorStationarity(x1, m = 0.25)
+```
+
+Now you can print the results:
+```{R}
+print(test1)
+```
+
+...and also plot it. Tell the `plot` method `what` you want to see -- the `"test"` statistics (default) or the `"values"` / `"residuals"` of the tested time series or `"both"` (which will generate two plots at once).
+```{R}
+plot(test1, what = "test")
+```
+
+Let's also have a look at an example, where (obviously) a structural break occurs and the stationarity ends after 100 observations. You may want exactly the first 93 observations to be part of the calibration period -- which is no problem, since you can just specify it via the `m` argument in both ways (fraction of length *and* number of observations).
+
+```{R}
+x2 <- c(x1[1:100], cumsum(x1[101:200]) / 2)
+test2 <- monitorStationarity(x2, m = 93)
+print(test2)
+```
+
+As already mentioned above, you can set the `what` argument to `"both"` to get to plots from the model:
+
+```{R, fig.height = 6}
+oldpar <- par(mfrow = c(2, 1))
+plot(test2, what = "both", legend = FALSE)
+par(oldpar)
+```
+
+
+
+### Monitoring Cointegration
+
+We generate a cointegration model with three regressors and get the response variable as the sum of them plus an intercept term of 1 and a random error. 
+
+```{R}
+set.seed(1909)
+x1 <- cumsum(rnorm(100, mean = 0.05, sd = 0.1))
+x2 <- cumsum(rnorm(100, sd = 0.1)) + 1
+x3 <- cumsum(rnorm(100, sd = 0.2)) + 2
+x <- cbind(x1, x2, x3)
+y <- 1 + x1 + x2 + x3 + rnorm(100, sd = 0.2)
+matplot(1:100, cbind(y, x), type = "l", main = "Cointegration Model",
+        xlab = "Observation Number", ylab = "")
+```
+
+Now, you want to monitor the cointegrating relationship and set the calibration period to 40 observations. There are (at least) two additional questions that you have to think about:
+1. Which method to use for estimating the model parameters?  
+This is done with the `cointReg` package, so you first of all may have a look at its documentation. There are three possible choices: `"FM"`, `"D"` and `"IM"`.
+2. Include a linear trend or only use an intercept?  
+For this question it may be helpful to see the results of a "full" `cointReg` model:
+```{R}
+m <- 40
+cointRegFM(x[1:m, ], y[1:m], deter = cbind(level = 1, trend = 1:m))
+```
+
+In the calibration period, the linear trend component is not significantly different from 0, so it should be sufficient to set `trend = FALSE`.
+
+```{R}
+test3 <- monitorCointegration(x = x, y = y, m = m, model = "FM", trend = FALSE)
+print(test3)
+```
+
+Again, this can be plotted to get a visual understanding of the results:
+
+```{R, fig.height = 6}
+oldpar <- par(mfrow = c(2, 1))
+plot(test3, what = "both", legend = FALSE)
+par(oldpar)
+```
+
+Obviously, the test statistics are always on a very low level and the residuals in the post-calibration period, determined by using the calibration period FM-OLS model, do not differ from its former behaviour.
+
+Finally, we can investigate a "broken" cointegration model, like the following one. It's with the same `x` and `y` values as above, but with an additional random-walk term beginning with observation no. 61.
+
+```{R}
+y2 <- y + c(rep(0, 60), cumsum(rnorm(40, sd = 0.5)))
+matplot(1:100, cbind(y2, x), type = "l", main = "Cointegration Model",
+        xlab = "Observation Number", ylab = "")
+abline(v = 60.5, col = 2)
+```
+
+Again, we set the argument `trend = FALSE` and have a look at the monitoring results:
+
+```{R}
+test4 <- monitorCointegration(x = x, y = y2, m = m, model = "FM", trend = FALSE)
+print(test4)
+```
+
+We can see, that the procedure is able to detect this structural break on a significant level (p < 0.01).
+
+The plot shows that the test statistic is increasing and crosses the critical value (grey dashed line) at observation no. 80.
+
+```{R, fig.height = 6}
+oldpar <- par(mfrow = c(2, 1))
+plot(test4, what = "both", legend = FALSE)
+par(oldpar)
+```
+
+For a detailed view on the test statistics, you can use the base plot argument `log`. It reveals that the test statistic is starting to grow immediately after observation no. 61, which is the first one after the structural break.
+
+```{R, fig.height = 3}
+plot(test4, what = "test", legend = FALSE, log = "y")
+```
