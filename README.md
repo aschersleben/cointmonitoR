@@ -2,6 +2,8 @@
 
 Consistent Monitoring of Stationarity and Cointegrating Relationships.
 
+[![Travis-CI Build Status](https://travis-ci.org/aschersleben/cointmonitoR.svg?branch=master)](https://travis-ci.org/aschersleben/cointmonitoR)
+
 * Installation (`cointmonitoR` depends on our [`cointReg`](https://github.com/aschersleben/cointReg) package, so install it first):
 ```r
 devtools::install_github("aschersleben/cointReg", build_vignettes = TRUE)
