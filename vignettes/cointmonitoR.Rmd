@@ -93,8 +93,10 @@ matplot(1:100, cbind(y, x), type = "l", main = "Cointegration Model",
 ```
 
 Now, you want to monitor the cointegrating relationship and set the calibration period to 40 observations. There are (at least) two additional questions that you have to think about:
+
 1. Which method to use for estimating the model parameters?  
 This is done with the `cointReg` package, so you first of all may have a look at its documentation. There are three possible choices: `"FM"`, `"D"` and `"IM"`.
+
 2. Include a linear trend or only use an intercept?  
 For this question it may be helpful to see the results of a "full" `cointReg` model:
 ```{R}
@@ -137,7 +139,7 @@ print(test4)
 
 We can see, that the procedure is able to detect this structural break on a significant level (p < 0.01).
 
-The plot shows that the test statistic is increasing and crosses the critical value (grey dashed line) at observation no. 80.
+The plot shows that the test statistic is increasing and crosses the critical value (grey dashed line) at observation no. ```r test4$time```.
 
 ```{R, fig.height = 6}
 oldpar <- par(mfrow = c(2, 1))
@@ -145,7 +147,7 @@ plot(test4, what = "both", legend = FALSE)
 par(oldpar)
 ```
 
-For a detailed view on the test statistics, you can use the base plot argument `log`. It reveals that the test statistic is starting to grow immediately after observation no. 61, which is the first one after the structural break.
+For a detailed view on the test statistics, you can use the base plot argument `log`. It reveals that the test statistic is starting to grow some observations after no. 61, which is the first one after the structural break.
 
 ```{R, fig.height = 3}
 plot(test4, what = "test", legend = FALSE, log = "y")
