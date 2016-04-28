@@ -134,11 +134,12 @@ monitorCointegration <- function(x, y, m = 0.25, model = c("FM", "D", "IM"),
   # check arguments
   if (check) {
     env <- environment()
-    checkVars(y = y, m = m, model = model, trend = trend,
-              kernel = kernel, bandwidth = bandwidth,
-              signif.level = signif.level, return.stats = return.stats,
-              return.input = return.input, .env = env)
-    x <- checkObject(x.coint = x)
+    cointReg::checkVars(y = y, m = m, model = model, trend = trend,
+                        kernel = kernel, bandwidth = bandwidth,
+                        signif.level = signif.level,
+                        return.stats = return.stats,
+                        return.input = return.input, .env = env)
+    x <- cointReg::checkObject(x.coint = x)
   }
 
   x.T <- nrow(x)
@@ -177,17 +178,18 @@ monitorCointegration <- function(x, y, m = 0.25, model = c("FM", "D", "IM"),
   x.m <- x[1:m.index, , drop = FALSE]
   deter.m <- deter[1:m.index, , drop = FALSE]
 
-  FM.m <- cointRegFM(x = x.m, y = y.m, deter = deter.m, kernel = kernel,
-                     bandwidth = bandwidth, demeaning = FALSE,
-                     check = FALSE, ...)
+  FM.m <- cointReg::cointRegFM(x = x.m, y = y.m, deter = deter.m,
+                               kernel = kernel, bandwidth = bandwidth,
+                               demeaning = FALSE, check = FALSE, ...)
   omega <- as.numeric(FM.m$omega.u.v)
   bw <- FM.m$bandwidth$number
   band <- FM.m$bandwidth$name
 
   if (model == "FM") {
     x.delta <- diff(x, lag = 1, differences = 1)
-    y.plus <- as.numeric(
-      y[-1, ] - x.delta %*% cointReg:::trySolve(FM.m$Omega$vv) %*% t(FM.m$Omega$uv))
+    y.plus <- y[-1, ] - x.delta %*% cointReg:::trySolve(FM.m$Omega$vv) %*%
+      t(FM.m$Omega$uv)
+    y.plus <- as.numeric(y.plus)
     u.fm <- as.numeric(y.plus - cbind(deter, x)[-1, ] %*% FM.m$theta)
     u <- c(0, u.fm)
     u.out <- c(NA, u.fm)
@@ -199,11 +201,12 @@ monitorCointegration <- function(x, y, m = 0.25, model = c("FM", "D", "IM"),
     if(!is.list(D.options))
       D.options <- list()
 
-    D.m <- cointRegD(x = x.m, y = y.m, deter = deter.m,
-                     n.lead = D.options$n.lead, n.lag = D.options$n.lag,
-                     kmax = D.options$kmax, D.options$info.crit,
-                     kernel = kernel, bandwidth = bw,
-                     demeaning = FALSE, check = FALSE)
+    D.m <- cointReg::cointRegD(x = x.m, y = y.m, deter = deter.m,
+                               n.lead = D.options$n.lead,
+                               n.lag = D.options$n.lag,
+                               kmax = D.options$kmax, D.options$info.crit,
+                               kernel = kernel, bandwidth = bw,
+                               demeaning = FALSE, check = FALSE)
     coint.mod <- D.m
     n.lead <- D.m$lead.lag$n.lead
     n.lag <- D.m$lead.lag$n.lag
@@ -231,11 +234,11 @@ monitorCointegration <- function(x, y, m = 0.25, model = c("FM", "D", "IM"),
   }
 
   if (model == "IM") {
-    IM.m <- cointRegIM(y = y.m, x = x.m, deter = deter.m, selector = 1,
-                       t.test = FALSE, kernel = kernel, bandwidth = bw,
-                       check = FALSE)
-    deter.cs <- colCumsums(deter)
-    x.cs <- colCumsums(x)
+    IM.m <- cointReg::cointRegIM(y = y.m, x = x.m, deter = deter.m,
+                                 selector = 1, t.test = FALSE, kernel = kernel,
+                                 bandwidth = bw, check = FALSE)
+    deter.cs <- matrixStats::colCumsums(deter)
+    x.cs <- matrixStats::colCumsums(x)
     multip <- cbind(deter.cs, x.cs, x)
     S <- as.numeric(cumsum(y) - multip %*% IM.m$theta.all)
     u.im <- diff(S)

@@ -140,11 +140,11 @@ monitorStationarity <- function(x, m = 0.25, trend = FALSE,
   # check arguments
   if (check) {
     env <- environment()
-    checkVars(m = m, trend = trend, kernel = kernel,
-              bandwidth = bandwidth, signif.level = signif.level,
-              return.stats = return.stats,
-              return.input = return.input, .env = env)
-    x <- checkObject(x.stat = x)
+    cointReg::checkVars(m = m, trend = trend, kernel = kernel,
+                        bandwidth = bandwidth, signif.level = signif.level,
+                        return.stats = return.stats,
+                        return.input = return.input, .env = env)
+    x <- cointReg::checkObject(x.stat = x)
   }
 
   x.T <- nrow(x)
@@ -181,16 +181,17 @@ monitorStationarity <- function(x, m = 0.25, trend = FALSE,
   sum.1m <- sum(S.dev[1:m.index])
 
   if(!is.numeric(bandwidth)) {
-    bw <- getBandwidth(u[1:m.index, , drop = FALSE], bandwidth = bandwidth,
-                       kernel = kernel, check = FALSE)
+    bw <- cointReg::getBandwidth(u[1:m.index, , drop = FALSE], kernel = kernel,
+                                 bandwidth = bandwidth, check = FALSE)
     bandwidth <- switch(bandwidth, and = "Andrews", nw = "Newey-West")
   } else {
     bw <- bandwidth
     bandwidth <- "set by user"
   }
-  omega <- as.numeric(getLongRunVar(u = u[1:m.index, , drop = FALSE],
-                                    kernel = kernel, bandwidth = bw,
-                                    demeaning = FALSE, check = FALSE)$Omega)
+  omega <- cointReg::getLongRunVar(u = u[1:m.index, , drop = FALSE],
+                                   kernel = kernel, bandwidth = bw,
+                                   demeaning = FALSE, check = FALSE)
+  omega <- as.numeric(omega$Omega)
 
   erg <- (cumsum.ms - sum.1m) / omega
   s <- seq(m.frac, 1, length = x.T - m.index)
