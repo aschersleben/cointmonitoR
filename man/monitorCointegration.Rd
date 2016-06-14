@@ -163,6 +163,13 @@ monitorCointegration(x = x, y = y3, m = 0.5, model = "D")
 monitorCointegration(x = x, y = y3, m = 0.5, model = "IM")
 
 }
+\references{
+\itemize{
+    \item Wagner, M. and D. Wied (2015): "Monitoring Stationarity and
+          Cointegration," \emph{Discussion Paper},
+          \href{http://dx.doi.org/10.2139/ssrn.2624657}{DOI:10.2139/ssrn.2624657}.
+  }
+}
 \seealso{
 Other cointmonitoR: \code{\link{monitorStationarity}},
   \code{\link{plot.cointmonitoR}},

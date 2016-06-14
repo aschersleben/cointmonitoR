@@ -15,7 +15,7 @@ See the DESCRIPTION:\cr
 \code{help(package = cointmonitoR)}
 
 See the README:\cr
-\url{https://github.com/aschersleben/cointmonitoR/README.md}
+\url{https://github.com/aschersleben/cointmonitoR/blob/master/README.md}
 
 Open the package documentation page:\cr
 \code{package?cointmonitoR}
@@ -46,18 +46,9 @@ Further information and bug reporting:\cr
 }
 }
 
-\section{Homepage}{
-
-See \url{https://github.com/aschersleben/cointmonitoR} for further information.
-}
-
 \section{Dependencies}{
 
-This package depends on the
-\href{https://github.com/aschersleben/cointReg}{\code{cointReg}} package,
-that can be installed via GitHub as follows:
-
-\code{devtools::install_github("aschersleben/cointReg",
-build_vignettes = TRUE)}
+This package mainly depends on our
+\href{https://cran.r-project.org/package=cointReg}{\code{cointReg}} package.
 }
 

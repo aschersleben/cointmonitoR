@@ -101,6 +101,13 @@
 #'
 #' @family cointmonitoR
 #'
+#' @references
+#'   \itemize{
+#'     \item Wagner, M. and D. Wied (2015): "Monitoring Stationarity and
+#'           Cointegration," \emph{Discussion Paper},
+#'           \href{http://dx.doi.org/10.2139/ssrn.2624657}{DOI:10.2139/ssrn.2624657}.
+#'   }
+#'
 #' @examples
 #' set.seed(42)
 #' x = data.frame(x1 = cumsum(rnorm(200)), x2 = cumsum(rnorm(200)))

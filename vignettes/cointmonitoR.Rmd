@@ -19,18 +19,14 @@ library(cointmonitoR)
 
 ## Install cointmonitoR
 
-At first, you have to install the `cointReg` package, that provides functions for parameter estimation and inference in cointegrating regressions (see its [GitHub page](https://github.com/aschersleben/cointReg) for further information).
-Since the two packages are not available on CRAN yet, you have to download and install the packages directly from GitHub.
-```{R, eval = FALSE}
-devtools::install_github("aschersleben/cointReg", build_vignettes = TRUE)
-```
+Since it's not available on CRAN yet, you have to download and install the package directly from GitHub.
+Also, the latest version of our `cointReg` package has to be installed. It provides functions for parameter estimation and inference in cointegrating regressions and the `cointmonitoR` package depends on it. See its [CRAN page](https://cran.r-project.org/package=cointReg) for further information.
 
-Then install the `cointmonitoR` package and load it:
 ```{R, eval = FALSE}
+install.packages("cointReg")
 devtools::install_github("aschersleben/cointmonitoR", build_vignettes = TRUE)
 library("cointmonitoR")
 ```
-
 
 
 ## Basic examples
