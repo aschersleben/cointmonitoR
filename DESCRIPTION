@@ -27,9 +27,11 @@ URL: https://github.com/aschersleben/cointmonitoR
 BugReports: https://github.com/aschersleben/cointmonitoR/issues
 License: GPL-3
 Depends:
-    cointReg
+    stats,
+    graphics,
+    cointReg (>= 0.2.0)
 Imports:
-    matrixStats
+    matrixStats (>= 0.14.1)
 RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown
