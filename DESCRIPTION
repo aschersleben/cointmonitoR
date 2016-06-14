@@ -1,7 +1,7 @@
 Package: cointmonitoR
 Type: Package
 Title: Consistent Monitoring of Stationarity and Cointegrating Relationships
-Date: 2015-01-14
+Date: 2016-06-14
 Version: 0.1.0
 Authors@R: c(
     person("Philipp", "Aschersleben", role = c("aut", "cre"),
@@ -15,9 +15,8 @@ Description: We propose a consistent monitoring procedure to detect a
     relationship. The procedure is based on residuals from modified least
     squares estimation, using either Fully Modified, Dynamic or Integrated
     Modified OLS. It is inspired by Chu et al. (1996) <DOI:10.2307/2171955> in
-    that it is based on
-    parameter estimation on a pre-break "calibration" period only, rather than
-    being based on sequential estimation over the full sample.
+    that it is based on parameter estimation on a pre-break "calibration" period
+    only, rather than being based on sequential estimation over the full sample.
     See the discussion paper <DOI:10.2139/ssrn.2624657> for further information.
     This package provides the monitoring procedures for both the cointegration
     and the stationarity case (while the latter is just a special case of the

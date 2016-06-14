@@ -36,6 +36,12 @@ package?cointmonitoR
 
 * [Package issues](https://github.com/aschersleben/cointmonitoR/issues)
 
+* [Package NEWS](https://github.com/aschersleben/cointmonitoR/blob/master/inst/NEWS.md)
+
+* Installation of the current development version from GitHub:
+```r
+devtools::install_github("aschersleben/cointmonitoR", build_vignettes = TRUE)
+```
 
 
 ## Theoretical background
