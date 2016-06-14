@@ -133,6 +133,8 @@
 #' monitorStationarity(x, m = 50)
 #' monitorStationarity(x2, m = 93)
 #'
+#' @importFrom stats lm predict.lm spline
+#'
 #' @export
 
 
@@ -173,7 +175,7 @@ monitorStationarity <- function(x, m = 0.25, trend = FALSE,
   if (trend) {
     data <- data.frame(x = x, trend = 1:x.T)
     reg <- lm(x ~ 1 + trend, subset = 1:m.index, data = data)
-    u <- x - predict(reg, newdata = data)
+    u <- x - predict.lm(reg, newdata = data)
     ex <- 5
     trend.name <- "trend"
   } else {

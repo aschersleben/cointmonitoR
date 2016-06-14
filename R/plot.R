@@ -82,6 +82,8 @@
 #' plot(test4, what = "both", legend = FALSE, main = "", main.val = "")
 #' par(oldpar)
 #'
+#' @importFrom graphics plot.default abline text legend par
+#'
 #' @export
 
 

@@ -1,5 +1,3 @@
-#' @import stats
-#' @import graphics
 #' @import cointReg
 #' @importFrom matrixStats colCumsums colDiffs
 

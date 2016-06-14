@@ -126,6 +126,8 @@
 #' monitorCointegration(x = x, y = y3, m = 0.5, model = "D")
 #' monitorCointegration(x = x, y = y3, m = 0.5, model = "IM")
 #'
+#' @importFrom stats spline
+#'
 #' @export
 
 
