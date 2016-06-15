@@ -7,8 +7,7 @@ Consistent Monitoring of Stationarity and Cointegrating Relationships.
 
 * Installation (including latest CRAN version of `cointReg`)
 ```r
-install.packages("cointReg")
-devtools::install_github("aschersleben/cointmonitoR", build_vignettes = TRUE)
+install.packages("cointmonitoR")
 library("cointmonitoR")
 ```
 

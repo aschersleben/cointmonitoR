@@ -2,7 +2,7 @@ Package: cointmonitoR
 Type: Package
 Title: Consistent Monitoring of Stationarity and Cointegrating Relationships
 Date: 2016-06-14
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Philipp", "Aschersleben", role = c("aut", "cre"),
            email = "aschersleben@statistik.tu-dortmund.de"),
